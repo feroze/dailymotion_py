@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-BASE='https://api.dailymotion.com/'
+BASE='https://api.dailymotion.com/json'
 KEY='13fe53372252ffbcf7fc'
 SECRET='1312afbc7a53a2f3c01fcf951878a05babd8bf4d'
 USER='feroztest'
@@ -37,23 +37,19 @@ refresh_token=result['refresh_token']
 UURL='?access_token='+access_token
 
 
-##Currently uses basic API. Switch to advanced api file.upload
-#req = urllib2.Request(BASE+'file/upload'+UURL)
-#result=json.load(urllib2.urlopen(req))
-#upload_url = result['upload_url']
 
-#print upload_url
+
 
 #advanced api
 job=json.dumps({"call":"file.upload","args":None})
 
 data = urlencode(values)
-req = urllib2.Request('https://api.dailymotion.com/json'+UURL, job, {'content-type': 'application/json'})
+req = urllib2.Request(BASE+UURL, job, {'content-type': 'application/json'})
 response = urllib2.urlopen(req)
 
 result=json.load(response)
 temp= result['result']
-#temp = json.dump(result['result'])
+
 upload_url= temp['upload_url']
 
 
@@ -77,26 +73,12 @@ result=json.load(urllib2.urlopen(request))
 v_url = result['url'] #video URL returned
 
 
-##Create video object -> Returns id
-##Doesn't work. Need to use file.upload
-#values = {'url' : v_url,
-#          }
-#
-#data = urlencode(values)
-#req = urllib2.Request(BASE+"videos"+UURL, data)
-#response = urllib2.urlopen(req)
-#
-#  
-#
-#result=json.load(response)
-#id=result['id']
-#
-#print id
+
 
 job=json.dumps({"call":"video.create","args":{"url":v_url}})
 
 data = urlencode(values)
-req = urllib2.Request('https://api.dailymotion.com/json'+UURL, job, {'content-type': 'application/json'})
+req = urllib2.Request(BASE+UURL, job, {'content-type': 'application/json'})
 response = urllib2.urlopen(req)
 
 
@@ -111,8 +93,8 @@ print id
 job=json.dumps({"call":"video.edit","args":{"id":id,"title":"samples","tags":"pitivi","channel":"comedy"}})
 
 data = urlencode(values)
-req = urllib2.Request('https://api.dailymotion.com/json'+UURL, job, {'content-type': 'application/json'})
+req = urllib2.Request(BASE+UURL, job, {'content-type': 'application/json'})
 response = urllib2.urlopen(req)
 
 
-print response.read()
+print "Upload successful - http://dailymotion.com/video/"+id
